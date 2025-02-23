@@ -1,6 +1,8 @@
 # fugue
 
-Fractional indexing without conflicts - based on [Fugue](https://arxiv.org/abs/2305.00583). 998 bytes (minified and brotlied) and no dependencies.
+Fractional indexing without conflicts - based on [Fugue](https://arxiv.org/abs/2305.00583).
+
+998 bytes (minified and brotlied) and no dependencies.
 
 Fractional indexing is a technique to create an ordering that can be used for [Realtime Editing of Ordered Sequences](https://www.figma.com/blog/realtime-editing-of-ordered-sequences/).
 
