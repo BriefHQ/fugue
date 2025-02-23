@@ -122,11 +122,19 @@ describe.concurrent("fugue", () => {
     const fugue2 = new Fugue("client2");
 
     const first = fugue1.createBetween(null, null);
-    const last = fugue2.createBetween(first, null);
-    const middle = fugue1.createBetween(first, last);
+    const last = fugue1.createBetween(first, null);
 
-    expect(first < middle).toBe(true);
-    expect(middle < last).toBe(true);
+    // simulating these happening in parallel
+    const middle1 = fugue1.createBetween(first, last);
+    const middle2 = fugue2.createBetween(first, last);
+
+    expect(middle1 < last).toBe(true);
+    expect(middle2 < last).toBe(true);
+    expect(middle1 > first).toBe(true);
+    expect(middle2 > first).toBe(true);
+    expect(middle1).not.toBe(middle2);
+
+    console.log({ first, last, middle1, middle2 });
   });
 
   test("boundary cases", () => {
