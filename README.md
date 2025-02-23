@@ -28,11 +28,11 @@ different clients are distinct and non-interleaving.
 > this can be created globally with a unique ID (e.g. `nanoid(6)`) and shared across clients.
 
 ```ts
-import { Fugue } from 'fugue'
+import { Fugue } from 'fugue';
 
 // created once in the runtime (this would be a unique ID for the client)
 // it is a good idea to reuse client IDs when possible
-export const fugue = new Fugue('client1')
+export const fugue = new Fugue('client1');
 ```
 
 Generate positions between two points using `createBetween`. Pass `null` for start/end to generate positions at the beginning/end:
@@ -40,19 +40,19 @@ Generate positions between two points using `createBetween`. Pass `null` for sta
 ```ts
 import { fugue } from "./fugue";
 
-const first = fugue.createBetween(null, null) // "client1.B"
+const first = fugue.createBetween(null, null); // "client1.B"
 
 // Insert after first
-const second = fugue.createBetween(first, null) // "client1.D"
+const second = fugue.createBetween(first, null); // "client1.D"
 
 // Insert after second
-const third = fugue.createBetween(second, null) // "client1.F"
+const third = fugue.createBetween(second, null); // "client1.F"
 
 // Insert before first
-const zeroth = fugue.createBetween(null, first) // "client1.A0B"
+const zeroth = fugue.createBetween(null, first); // "client1.A0B"
 
 // Insert between second and third (midpoint)
-const secondAndHalf = fugue.createBetween(second, third) // "client1.D0B"
+const secondAndHalf = fugue.createBetween(second, third); // "client1.D0B"
 ```
 
 The biggest benefit of using `fugue` over other fractional indexing libraries is that multiple independent clients
