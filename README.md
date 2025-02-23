@@ -73,6 +73,8 @@ const last = fugue1.createBetween(initialFirst, null); // "client1.D"
 // simulating these happening in parallel (e.g. across multiple independent clients)
 const middle1 = fugue1.createBetween(first, last); // "client1.B0B"
 const middle2 = fugue2.createBetween(first, last); // "client1.B,client2.B"
+
+// these eventually grow to e.g.: client0.B0A0B0aH0B,client1.D,client2.B,client3.L,client4.B,client5.D,client6.B,client7.B,client10.B,client23.B,client35.B,client36.B
 ```
 
 ## Features

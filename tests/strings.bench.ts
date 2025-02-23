@@ -24,10 +24,10 @@ describe("benchmarks", () => {
     internal.createBetween(pos1, pos2);
   });
 
-  bench("multiple instances (100)", () => {
+  bench("multiple instances", () => {
     const instances = Array.from(
-      { length: 30 },
-      (_, i) => new Fugue(`test${i}`),
+      { length: 40 },
+      (_, i) => new Fugue(`client${i}`),
     );
     const allPositions: string[] = [];
 
@@ -39,7 +39,7 @@ describe("benchmarks", () => {
 
     // Each instance creates positions between existing positions
     for (const instance of instances) {
-      for (let j = 0; j < 2000; j++) {
+      for (let j = 0; j < 1200; j++) {
         // Pick two random existing positions or null
         const pos1 =
           allPositions.length > 0
@@ -66,11 +66,9 @@ describe("benchmarks", () => {
         }
 
         allPositions.push(newPos);
-      }
-    }
 
-    for (const instance of instances) {
-      console.log(instance.cacheSize);
+        console.log(newPos);
+      }
     }
   });
 });
