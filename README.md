@@ -1,8 +1,14 @@
+
+
 # fugue
 
-A library for fractional indexing, without conflicts.
+Fractional indexing without conflicts - based on [Fugue](https://arxiv.org/abs/2305.00583).
+
+Fractional indexing is a technique to create an ordering that can be used for [Realtime Editing of Ordered Sequences](https://www.figma.com/blog/realtime-editing-of-ordered-sequences/).
 
 Heavily based on [position-strings](https://github.com/mweidner037/position-strings), with added support for keys that were created by different libraries (e.g. [`fractional-indexing`](https://github.com/rocicorp/fractional-indexing)).
+
+[![install size](https://packagephobia.com/badge?p=fugue)](https://packagephobia.com/result?p=fugue)
 
 ## Installation
 

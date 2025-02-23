@@ -1,11 +1,11 @@
 {
   "name": "fugue",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Fractional indexing without conflicts.",
   "type": "module",
   "scripts": {
     "clean": "rm -rf dist node_modules coverage",
-    "build": "tsup src/index.ts --format cjs,esm --dts --sourcemap",
+    "build": "tsup src/index.ts --format cjs,esm --dts",
     "release": "pnpm run build && pnpm publish",
     "test": "vitest run --typecheck --coverage",
     "test:types": "cd tests && tsc --noEmit",
