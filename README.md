@@ -25,7 +25,7 @@ unique identifier for the client. This is used to ensure that positions created 
 different clients are distinct and non-interleaving.
 
 > The `clientID` should be a string that is unique to the JS runtime. On the server or client,
-> this can be created globally with a unique ID (e.g. `nanoid(10)`) and shared across clients.
+> this can be created globally with a unique ID (e.g. `nanoid(6)`) and shared across clients.
 
 ```ts
 import { Fugue } from 'fugue'
