@@ -1,0 +1,12 @@
+integration/
+tests/
+coverage/
+.gitignore
+.github/
+.prettierrc
+.vscode/
+vitest.config.ts
+tsconfig.json
+tsconfig.build.json
+pnpm-lock.yaml
+pnpm-workspace.yaml

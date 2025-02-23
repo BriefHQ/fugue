@@ -1,20 +1,32 @@
 {
   "compilerOptions": {
-    "rootDir": "src",
-    "outDir": "build/esm",
-    "target": "es2021",
-    "module": "es2015",
-    /* Needed with module: es2015 or else stuff breaks. */
-    "moduleResolution": "node",
-    /* Enable strict type checking. */
-    "strict": true,
-    /* Enable interop with dependencies using different module systems. */
+    "target": "ESNext",
+    "module": "ESNext",
+    "verbatimModuleSyntax": true,
     "esModuleInterop": true,
-    /* Emit .d.ts files. */
+    "moduleResolution": "bundler",
+    "moduleDetection": "force",
+    "strict": true,
+    "exactOptionalPropertyTypes": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "strictNullChecks": true,
+    "declarationMap": true,
+    "sourceMap": true,
     "declaration": true,
-    /* Emit sourcemap files. */
-    "sourceMap": true
-    /* Don't turn on importHelpers, so we can avoid tslib dependency. */
+    "noEmit": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowJs": true,
+    "preserveSymlinks": true,
+    "types": ["node", "vitest"],
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "lib": ["dom", "ESNext"],
+    "jsx": "react-jsx",
+    "outDir": "out"
   },
-  "include": ["src"]
+  "include": ["src/**/*.ts", "tests/**/*.ts", "integration/**/*.ts"]
 }

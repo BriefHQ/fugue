@@ -12,21 +12,21 @@ position-strings's implicit tree is structured in layers. Each layer has a speci
 
 The 3 node/layer types are:
 
-1. **Waypoint nodes**: Labeled by the ID of the `PositionSource` that created it, sorted arbitrarily. The ID ensures that positions created by different `PositionSource`s are distinct: each `PositionSource` only returns positions whose _final_ waypoint node uses its own ID.
-2. **valueIndex nodes**: Labeled by an integer, sorted by magnitude. When a `PositionSource` creates positions in a left-to-right sequence, instead of appending a new waypoint node each time, it reuses the first waypoint node and just increases the valueIndex. That causes the position string length to grow logarithmically instead of linearly.
+1. **Waypoint nodes**: Labeled by the ID of the `Fugue` that created it, sorted arbitrarily. The ID ensures that positions created by different `Fugue`s are distinct: each `Fugue` only returns positions whose _final_ waypoint node uses its own ID.
+2. **valueIndex nodes**: Labeled by an integer, sorted by magnitude. When a `Fugue` creates positions in a left-to-right sequence, instead of appending a new waypoint node each time, it reuses the first waypoint node and just increases the valueIndex. That causes the position string length to grow logarithmically instead of linearly.
 3. **Side nodes**: Labeled by a bit "left side" (0) or "right side" (1). The actual position at a node, and all of the node's right-side descendants, use "right side"; all of its left-side descendants use "left side". This ensures that all left descendants are less than the position at a node, which is less than all right descendants.
 
 ### `createBetween`
 
-In terms of the tree structure, `PositionSource.createBetween(left, right)` does the following:
+In terms of the tree structure, `Fugue.createBetween(left, right)` does the following:
 
 1. If `right` is a descendant of `left`, create a left descendant of `right` as follows. First, create a waypoint node that is a left child of `right` (replacing `right`'s final "right side" bit with "left side"). Then append the next new valueIndex node (usually 0) and a "right side" node, to fill out the 3 layers. Return that final node.
-2. Otherwise, see if we can just increase `left`'s final valueIndex, instead of lengthing its path. This is allowed if (a) `left`'s final waypoint node uses our ID, and (b) `right` doesn't use that same waypoint node. If so, look up the next unused valueIndex for that waypoint (stored in `PositionSource`), then use `left` but with that final valueIndex.
+2. Otherwise, see if we can just increase `left`'s final valueIndex, instead of lengthing its path. This is allowed if (a) `left`'s final waypoint node uses our ID, and (b) `right` doesn't use that same waypoint node. If so, look up the next unused valueIndex for that waypoint (stored in `Fugue`), then use `left` but with that final valueIndex.
 3. If not, create a right descendant of `left` like in case 1: append a waypoint node, the next new valueIndex, then "right side"; return that final node.
 
 You can check that the resulting node lies between `left` and `right`, and that this procedure satisfies properties 4-6 from the [README](./README.md).
 
-> The tree we've described so far is similar to that used by the [Logoot List CRDT](https://doi.org/10.1109/ICDCS.2009.75), which also has alternating layers of IDs and numbers. However, Logoot sorts by numbers first and then IDs, while we do the opposite. This lets us avoid interleaving: if two `PositionSource`s concurrently create a sequence of positions at the same place, their positions will end up under different waypoint nodes, hence appear one after the other.
+> The tree we've described so far is similar to that used by the [Logoot List CRDT](https://doi.org/10.1109/ICDCS.2009.75), which also has alternating layers of IDs and numbers. However, Logoot sorts by numbers first and then IDs, while we do the opposite. This lets us avoid interleaving: if two `Fugue`s concurrently create a sequence of positions at the same place, their positions will end up under different waypoint nodes, hence appear one after the other.
 
 ## String Representation
 

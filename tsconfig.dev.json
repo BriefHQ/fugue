@@ -1,5 +1,0 @@
-{
-  "extends": "./tsconfig.commonjs.json",
-  "compilerOptions": { "resolveJsonModule": true },
-  "include": ["src", "test", "benchmarks"]
-}

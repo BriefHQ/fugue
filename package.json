@@ -1,72 +1,64 @@
 {
-  "name": "position-strings",
-  "version": "2.0.1",
-  "description": "Lexicographically-ordered position strings for collaborative lists and text",
-  "author": "Matthew Weidner",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/mweidner037/position-strings/issues"
+  "name": "fugue",
+  "version": "0.0.1",
+  "description": "Fractional indexing without conflicts.",
+  "type": "module",
+  "scripts": {
+    "clean": "rm -rf dist node_modules coverage",
+    "build": "tsup src/index.ts --format cjs,esm --dts --sourcemap",
+    "release": "pnpm run build && pnpm publish",
+    "test": "vitest run --typecheck --coverage",
+    "test:types": "cd tests && tsc --noEmit",
+    "test:bench": "vitest bench",
+    "test:ui": "vitest --ui"
   },
-  "homepage": "https://github.com/mweidner037/position-strings/tree/master/#readme",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mweidner037/position-strings.git"
+    "url": "git+https://github.com/BriefHQ/fugue.git"
   },
   "keywords": [
-    "CRDT",
-    "text editing",
-    "collaboration",
-    "fractional indexing"
+    "fractional indexing",
+    "sync",
+    "local-first",
+    "fugue",
+    "database",
+    "typescript",
+    "ts"
   ],
-  "module": "build/esm/index.js",
-  "browser": "build/esm/index.js",
-  "types": "build/esm/index.d.ts",
-  "main": "build/commonjs/index.js",
-  "files": [
-    "/build",
-    "/src"
-  ],
-  "directories": {
-    "lib": "src"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "sideEffects": false,
-  "dependencies": {
-    "@types/seedrandom": "^2.4.28"
+  "author": "BriefHQ",
+  "license": "MIT",
+  "homepage": "https://github.com/BriefHQ/fugue",
+  "bugs": {
+    "url": "https://github.com/BriefHQ/fugue/issues"
   },
   "devDependencies": {
-    "@types/chai": "^4.3.4",
-    "@types/functional-red-black-tree": "^1.0.2",
-    "@types/mocha": "^10.0.1",
-    "@typescript-eslint/eslint-plugin": "^5.52.0",
-    "@typescript-eslint/parser": "^5.52.0",
-    "chai": "^4.3.7",
-    "cross-env": "^7.0.3",
-    "eslint": "^8.34.0",
-    "eslint-config-prettier": "^8.6.0",
-    "eslint-plugin-import": "^2.27.5",
-    "functional-red-black-tree": "^1.0.1",
-    "mocha": "^10.2.0",
-    "npm-run-all": "^4.1.5",
-    "prettier": "^2.8.4",
-    "rimraf": "^4.1.2",
-    "seedrandom": "^3.0.5",
-    "ts-node": "^10.9.1",
-    "typescript": "^4.9.5"
+    "@types/node": "^22.13.4",
+    "@vitest/coverage-v8": "3.0.6",
+    "@vitest/ui": "^3.0.6",
+    "esbuild": "^0.25.0",
+    "fractional-indexing": "^3.2.0",
+    "jsdom": "^26.0.0",
+    "prettier": "^3.5.1",
+    "tsup": "^8.3.6",
+    "typescript": "^5.7.3",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^3.0.6"
   },
-  "scripts": {
-    "prepack": "npm run clean && npm run build && npm run test",
-    "build": "npm-run-all build:*",
-    "build:ts": "tsc -p tsconfig.json && tsc -p tsconfig.commonjs.json",
-    "test": "npm-run-all test:*",
-    "test:lint": "eslint --ext .ts,.js .",
-    "test:unit": "cross-env TS_NODE_PROJECT='./tsconfig.dev.json' mocha",
-    "test:format": "prettier --check .",
-    "fix": "npm-run-all fix:*",
-    "fix:format": "prettier --write .",
-    "benchmarks": "ts-node --project tsconfig.dev.json benchmarks/main.ts",
-    "clean": "rimraf generated generated_esm build"
+  "pnpm": {
+    "ignoredBuiltDependencies": [
+      "esbuild"
+    ],
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
   }
 }

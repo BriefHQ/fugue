@@ -1,7 +1,4 @@
+dist/
+node_modules/
+coverage/
 .DS_Store
-node_modules
-build
-.vscode/
-.idea/
-*.tsbuildinfo
-benchmark_results
