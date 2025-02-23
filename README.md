@@ -61,3 +61,7 @@ const secondAndHalf = fugue.createBetween(second, third) // "client1.D0B"
 ## License
 
 [Unlicense](LICENSE)
+
+## Attributions
+
+Thanks to [pgte](https://github.com/pgte) for the NPM package name.
