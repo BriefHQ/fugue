@@ -31,6 +31,7 @@ different clients are distinct and non-interleaving.
 import { Fugue } from 'fugue'
 
 // created once in the runtime (this would be a unique ID for the client)
+// it is a good idea to reuse client IDs when possible
 export const fugue = new Fugue('client1')
 ```
 
