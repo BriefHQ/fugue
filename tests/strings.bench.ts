@@ -66,8 +66,6 @@ describe("benchmarks", () => {
         }
 
         allPositions.push(newPos);
-
-        console.log(newPos);
       }
     }
   });
