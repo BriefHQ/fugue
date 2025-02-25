@@ -2,21 +2,7 @@ import { bench, describe } from "vitest";
 import { Fugue } from "../src";
 
 describe("benchmarks", () => {
-  const fugue = new Fugue("test");
-
-  bench("simple", () => {
-    const pos1 = fugue.createBetween(null, null);
-    const pos2 = fugue.createBetween(pos1, null);
-    fugue.createBetween(pos1, pos2);
-  });
-
-  bench("fugue", () => {
-    const pos1 = fugue.createBetween(null, null);
-    const pos2 = fugue.createBetween(pos1, null);
-    fugue.createBetween(pos1, pos2);
-  });
-
-  bench("class instantiation", () => {
+  bench("single", () => {
     const internal = new Fugue("test");
 
     const pos1 = internal.createBetween(null, null);
@@ -26,46 +12,28 @@ describe("benchmarks", () => {
 
   bench("multiple instances", () => {
     const instances = Array.from(
-      { length: 40 },
+      { length: 100 },
       (_, i) => new Fugue(`client${i}`),
     );
-    const allPositions: string[] = [];
+
+    let firstKey: string | null = null;
+    let lastKey: string | null = null;
 
     // Create initial position for first instance
     const firstInstance = instances[0];
     if (firstInstance) {
-      allPositions.push(firstInstance.createBetween(null, null));
+      firstKey = firstInstance.createBetween(null, null);
+      lastKey = firstInstance.createBetween(firstKey, null);
     }
 
-    // Each instance creates positions between existing positions
-    for (const instance of instances) {
-      for (let j = 0; j < 1200; j++) {
-        // Pick two random existing positions or null
-        const pos1 =
-          allPositions.length > 0
-            ? (allPositions[Math.floor(Math.random() * allPositions.length)] ??
-              null)
-            : null;
-        const pos2 =
-          allPositions.length > 0
-            ? (allPositions[Math.floor(Math.random() * allPositions.length)] ??
-              null)
-            : null;
+    let previousKey: string | null = firstKey;
 
-        let newPos: string;
+    for (let j = 0; j < 10; j++) {
+      for (const instance of instances) {
+        const newPos = instance.createBetween(previousKey, lastKey);
+        const newPos2 = instance.createBetween(previousKey, newPos);
 
-        if (pos1 === pos2) {
-          // If the two positions are the same, create a new position at the end
-          newPos = instance.createBetween(pos1, null);
-        } else {
-          // If the two positions are different, create a new position between them
-          const a = pos1 && pos2 ? (pos2 > pos1 ? pos1 : pos2) : null;
-          const b = pos1 && pos2 ? (pos2 > pos1 ? pos2 : pos1) : null;
-
-          newPos = instance.createBetween(a, b);
-        }
-
-        allPositions.push(newPos);
+        previousKey = newPos2;
       }
     }
   });
