@@ -11,7 +11,7 @@ import {
   stringifyShortName,
 } from "../src/strings";
 
-describe.concurrent("fugue", () => {
+describe("fugue", () => {
   test("basic position creation", () => {
     const fugue = new Fugue("client1");
 
@@ -280,7 +280,7 @@ describe.concurrent("fugue", () => {
   test("positions from different Fugue instances do not necessarily compare meaningfully", () => {
     // If you have a different client ID, you can still compare
     // them lexicographically, but there is no guarantee they'd
-    // interleave in a predictable way with another client’s positions
+    // interleave in a predictable way with another client's positions
     const fugueA = new Fugue("A");
     const fugueB = new Fugue("B");
 
@@ -311,10 +311,30 @@ describe.concurrent("fugue", () => {
   });
 
   test("sanitized clientID does not contain '.' or ','", () => {
-    // We'll rely on the constructor’s behavior:
+    // We'll rely on the constructor's behavior:
     const fugueBad = new Fugue("some,bad.id");
     expect(fugueBad.clientID.includes(".")).toBe(false);
     expect(fugueBad.clientID.includes(",")).toBe(false);
+  });
+
+  test("same client ID produces deterministic positions", () => {
+    const fugue1 = new Fugue("deterministic");
+    const fugue2 = new Fugue("deterministic");
+
+    // Create a sequence of positions with first instance
+    const pos1_1 = fugue1.createBetween(null, null);
+    const pos1_2 = fugue1.createBetween(pos1_1, null);
+    const pos1_3 = fugue1.createBetween(pos1_2, null);
+
+    // Create the same sequence with second instance
+    const pos2_1 = fugue2.createBetween(null, null);
+    const pos2_2 = fugue2.createBetween(pos2_1, null);
+    const pos2_3 = fugue2.createBetween(pos2_2, null);
+
+    // Verify positions are exactly the same
+    expect(pos1_1).toBe(pos2_1);
+    expect(pos1_2).toBe(pos2_2);
+    expect(pos1_3).toBe(pos2_3);
   });
 });
 
