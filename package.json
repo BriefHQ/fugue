@@ -1,6 +1,6 @@
 {
   "name": "fugue",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Fractional indexing without conflicts.",
   "type": "module",
   "scripts": {

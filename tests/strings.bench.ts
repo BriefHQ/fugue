@@ -5,9 +5,9 @@ describe("benchmarks", () => {
   bench("single", () => {
     const internal = new Fugue("test");
 
-    const pos1 = internal.createBetween(null, null);
-    const pos2 = internal.createBetween(pos1, null);
-    internal.createBetween(pos1, pos2);
+    const pos1 = internal.between(null, null);
+    const pos2 = internal.between(pos1, null);
+    internal.between(pos1, pos2);
   });
 
   bench("multiple instances", () => {
@@ -22,16 +22,16 @@ describe("benchmarks", () => {
     // Create initial position for first instance
     const firstInstance = instances[0];
     if (firstInstance) {
-      firstKey = firstInstance.createBetween(null, null);
-      lastKey = firstInstance.createBetween(firstKey, null);
+      firstKey = firstInstance.between(null, null);
+      lastKey = firstInstance.between(firstKey, null);
     }
 
     let previousKey: string | null = firstKey;
 
     for (let j = 0; j < 10; j++) {
       for (const instance of instances) {
-        const newPos = instance.createBetween(previousKey, lastKey);
-        const newPos2 = instance.createBetween(previousKey, newPos);
+        const newPos = instance.between(previousKey, lastKey);
+        const newPos2 = instance.between(previousKey, newPos);
 
         previousKey = newPos2;
       }
