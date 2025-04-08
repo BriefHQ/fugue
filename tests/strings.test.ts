@@ -16,19 +16,19 @@ describe("fugue", () => {
     const fugue = new Fugue("client1");
 
     // Create first position
-    const first = fugue.createBetween(null, null);
+    const first = fugue.between(null, null);
 
     // Insert after first
-    const second = fugue.createBetween(first, null);
+    const second = fugue.between(first, null);
 
     // Insert after second
-    const third = fugue.createBetween(second, null);
+    const third = fugue.between(second, null);
 
     // Insert before first
-    const zeroth = fugue.createBetween(null, first);
+    const zeroth = fugue.between(null, first);
 
     // Insert between second and third (midpoint)
-    const secondAndHalf = fugue.createBetween(second, third);
+    const secondAndHalf = fugue.between(second, third);
 
     expect(first < second).toBe(true);
     expect(first < third).toBe(true);
@@ -48,8 +48,8 @@ describe("fugue", () => {
     const fugue1 = new Fugue("server");
     const fugue2 = new Fugue("server");
 
-    const pos1 = fugue1.createBetween(null, null);
-    const pos2 = fugue2.createBetween(pos1, null);
+    const pos1 = fugue1.between(null, null);
+    const pos2 = fugue2.between(pos1, null);
 
     expect(pos1).not.toBe(pos2);
     expect(pos1 < pos2).toBe(true);
@@ -62,20 +62,20 @@ describe("fugue", () => {
     const fugue = new Fugue("test");
 
     // Test when left >= right
-    const pos1 = fugue.createBetween("B", "A");
+    const pos1 = fugue.between("B", "A");
     expect(pos1).toBeTruthy();
     expect(pos1 > Fugue.FIRST).toBe(true);
 
     // Test when right > LAST
-    const pos2 = fugue.createBetween(null, "~~~");
+    const pos2 = fugue.between(null, "~~~");
     expect(pos2 < Fugue.LAST).toBe(true);
 
     // Test with completely invalid position strings
-    const pos3 = fugue.createBetween("xyz", null); // No waypoint chars at all
+    const pos3 = fugue.between("xyz", null); // No waypoint chars at all
     expect(pos3).toBeTruthy();
     expect(pos3 > Fugue.FIRST).toBe(true);
 
-    const pos4 = fugue.createBetween("", null); // Empty string
+    const pos4 = fugue.between("", null); // Empty string
     expect(pos4).toBeTruthy();
     expect(pos4 > Fugue.FIRST).toBe(true);
   });
@@ -87,7 +87,7 @@ describe("fugue", () => {
     // Create a sequence of positions
     let prev = null;
     for (let i = 0; i < 10; i++) {
-      const pos = fugue.createBetween(prev, null);
+      const pos = fugue.between(prev, null);
       positions.push(pos);
       prev = pos;
     }
@@ -108,8 +108,8 @@ describe("fugue", () => {
     const last = generateKeyBetween(first, null);
     // const third = generateKeyBetween(second, null);
 
-    const middle = internal.createBetween(first, last);
-    const middle2 = internal.createBetween(first, middle);
+    const middle = internal.between(first, last);
+    const middle2 = internal.between(first, middle);
 
     expect(first < middle).toBe(true);
     expect(middle < last).toBe(true);
@@ -121,12 +121,12 @@ describe("fugue", () => {
     const fugue1 = new Fugue("client1");
     const fugue2 = new Fugue("client2");
 
-    const first = fugue1.createBetween(null, null);
-    const last = fugue1.createBetween(first, null);
+    const first = fugue1.between(null, null);
+    const last = fugue1.between(first, null);
 
     // simulating these happening in parallel
-    const middle1 = fugue1.createBetween(first, last);
-    const middle2 = fugue2.createBetween(first, last);
+    const middle1 = fugue1.between(first, last);
+    const middle2 = fugue2.between(first, last);
 
     expect(middle1 < last).toBe(true);
     expect(middle2 < last).toBe(true);
@@ -141,15 +141,15 @@ describe("fugue", () => {
     const fugue = new Fugue("test");
 
     // Test insertion at start
-    const firstPos = fugue.createBetween(Fugue.FIRST, null);
+    const firstPos = fugue.between(Fugue.FIRST, null);
     expect(firstPos > Fugue.FIRST).toBe(true);
 
     // Test insertion at end
-    const lastPos = fugue.createBetween(null, Fugue.LAST);
+    const lastPos = fugue.between(null, Fugue.LAST);
     expect(lastPos < Fugue.LAST).toBe(true);
 
     // Test insertion between FIRST and LAST
-    const middlePos = fugue.createBetween(Fugue.FIRST, Fugue.LAST);
+    const middlePos = fugue.between(Fugue.FIRST, Fugue.LAST);
     expect(middlePos > Fugue.FIRST && middlePos < Fugue.LAST).toBe(true);
   });
 
@@ -162,7 +162,7 @@ describe("fugue", () => {
     let positions: string[] = [];
     for (let i = 0; i < 100; i++) {
       // Increased to ensure we get indices > 52
-      const pos = fugue.createBetween(prev, null);
+      const pos = fugue.between(prev, null);
       positions.push(pos);
       prev = pos;
     }
@@ -180,7 +180,7 @@ describe("fugue", () => {
     ];
 
     for (const invalidPos of invalidPositions) {
-      const nextPos = fugue.createBetween(invalidPos, null);
+      const nextPos = fugue.between(invalidPos, null);
       expect(nextPos).toBeTruthy();
       expect(nextPos > Fugue.FIRST).toBe(true);
     }
@@ -190,8 +190,8 @@ describe("fugue", () => {
     const fugue = new Fugue("test");
 
     // Create initial positions
-    const start = fugue.createBetween(null, null);
-    const end = fugue.createBetween(start, null);
+    const start = fugue.between(null, null);
+    const end = fugue.between(start, null);
 
     // Create multiple positions between start and end
     const middlePositions: string[] = [];
@@ -203,7 +203,7 @@ describe("fugue", () => {
         insertAfter = middlePositions[randomIndex]!;
       }
 
-      const pos = fugue.createBetween(insertAfter, end);
+      const pos = fugue.between(insertAfter, end);
       middlePositions.push(pos);
     }
 
@@ -219,7 +219,7 @@ describe("fugue", () => {
     for (let i = 0; i < allPositions.length - 1; i++) {
       const pos1 = allPositions[i]!;
       const pos2 = allPositions[i + 1]!;
-      const newPos = fugue.createBetween(pos1, pos2);
+      const newPos = fugue.between(pos1, pos2);
       expect(pos1 < newPos).toBe(true);
       expect(newPos < pos2).toBe(true);
     }
@@ -228,7 +228,7 @@ describe("fugue", () => {
   test("basic position creation", () => {
     const fugue = new Fugue("basic");
 
-    const pos = fugue.createBetween(null, null);
+    const pos = fugue.between(null, null);
 
     // By definition, FIRST < pos < LAST
     expect(pos > Fugue.FIRST).toBe(true);
@@ -238,17 +238,17 @@ describe("fugue", () => {
   test("sequential creation", () => {
     const fugue = new Fugue("sequential");
 
-    const pos1 = fugue.createBetween(null, null);
-    const pos2 = fugue.createBetween(pos1, null);
+    const pos1 = fugue.between(null, null);
+    const pos2 = fugue.between(pos1, null);
     expect(pos1 < pos2).toBe(true);
   });
 
   test("inserting in the middle", () => {
     const fugue = new Fugue("inserting");
 
-    const pos1 = fugue.createBetween(null, null);
-    const pos2 = fugue.createBetween(pos1, null);
-    const pos3 = fugue.createBetween(pos1, pos2);
+    const pos1 = fugue.between(null, null);
+    const pos2 = fugue.between(pos1, null);
+    const pos3 = fugue.between(pos1, pos2);
 
     expect(pos1 < pos3).toBe(true);
     expect(pos3 < pos2).toBe(true);
@@ -260,11 +260,11 @@ describe("fugue", () => {
     // Insert a sequence of positions in an array, ensuring we always insert
     // a 'middle' position each time to check correctness of ordering
     const positions: string[] = [];
-    positions.push(fugue.createBetween(null, null)); // first item
+    positions.push(fugue.between(null, null)); // first item
     for (let i = 0; i < 5; i++) {
       const left = positions[Math.floor(positions.length / 2)];
       const right = null; // always append at the end after 'left'
-      const newPos = fugue.createBetween(left ?? null, right);
+      const newPos = fugue.between(left ?? null, right);
       positions.push(newPos);
     }
 
@@ -284,8 +284,8 @@ describe("fugue", () => {
     const fugueA = new Fugue("A");
     const fugueB = new Fugue("B");
 
-    const a1 = fugueA.createBetween(null, null);
-    const b1 = fugueB.createBetween(null, null);
+    const a1 = fugueA.between(null, null);
+    const b1 = fugueB.between(null, null);
 
     // Lex compare might place a1 < b1 or b1 < a1, depending on the
     // sanitized ID. We can at least ensure they're not equal
@@ -297,14 +297,14 @@ describe("fugue", () => {
     const cacheSize = fugue.cacheSize;
     expect(cacheSize).toBe(0);
 
-    const first = fugue.createBetween(null, null);
+    const first = fugue.between(null, null);
 
     for (let i = 0; i < 1300; i++) {
       const fugue2 = new Fugue(`other${i}`);
 
-      const newPos = fugue2.createBetween(first, null);
+      const newPos = fugue2.between(first, null);
 
-      fugue.createBetween(first, newPos);
+      fugue.between(first, newPos);
     }
 
     expect(fugue.cacheSize).toBe(1000);
@@ -322,14 +322,14 @@ describe("fugue", () => {
     const fugue2 = new Fugue("deterministic");
 
     // Create a sequence of positions with first instance
-    const pos1_1 = fugue1.createBetween(null, null);
-    const pos1_2 = fugue1.createBetween(pos1_1, null);
-    const pos1_3 = fugue1.createBetween(pos1_2, null);
+    const pos1_1 = fugue1.between(null, null);
+    const pos1_2 = fugue1.after(pos1_1);
+    const pos1_3 = fugue1.after(pos1_2);
 
     // Create the same sequence with second instance
-    const pos2_1 = fugue2.createBetween(null, null);
-    const pos2_2 = fugue2.createBetween(pos2_1, null);
-    const pos2_3 = fugue2.createBetween(pos2_2, null);
+    const pos2_1 = fugue2.between(null, null);
+    const pos2_2 = fugue2.after(pos2_1);
+    const pos2_3 = fugue2.after(pos2_2);
 
     // Verify positions are exactly the same
     expect(pos1_1).toBe(pos2_1);

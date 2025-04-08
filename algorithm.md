@@ -16,9 +16,9 @@ The 3 node/layer types are:
 2. **valueIndex nodes**: Labeled by an integer, sorted by magnitude. When a `Fugue` creates positions in a left-to-right sequence, instead of appending a new waypoint node each time, it reuses the first waypoint node and just increases the valueIndex. That causes the position string length to grow logarithmically instead of linearly.
 3. **Side nodes**: Labeled by a bit "left side" (0) or "right side" (1). The actual position at a node, and all of the node's right-side descendants, use "right side"; all of its left-side descendants use "left side". This ensures that all left descendants are less than the position at a node, which is less than all right descendants.
 
-### `createBetween`
+### `between`
 
-In terms of the tree structure, `Fugue.createBetween(left, right)` does the following:
+In terms of the tree structure, `Fugue.between(left, right)` does the following:
 
 1. If `right` is a descendant of `left`, create a left descendant of `right` as follows. First, create a waypoint node that is a left child of `right` (replacing `right`'s final "right side" bit with "left side"). Then append the next new valueIndex node (usually 0) and a "right side" node, to fill out the 3 layers. Return that final node.
 2. Otherwise, see if we can just increase `left`'s final valueIndex, instead of lengthing its path. This is allowed if (a) `left`'s final waypoint node uses our ID, and (b) `right` doesn't use that same waypoint node. If so, look up the next unused valueIndex for that waypoint (stored in `Fugue`), then use `left` but with that final valueIndex.

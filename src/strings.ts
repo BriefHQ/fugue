@@ -55,14 +55,27 @@ export class Fugue<TClientID extends string = string> {
   }
 
   /**
-   * Returns a new position between `a` and `b`
-   * (`a < new < b`).
-   *
-   * @param a an existing position, or null to insert at the beginning.
-   *
-   * @param b an existing position, or null to insert at the end.
+   * Creates a new position between two existing positions.
+   * The new position will be greater than `a` and less than `b`.
+   * 
+   * @param a - An existing position to insert after, or null to insert at the beginning
+   * @param b - An existing position to insert before, or null to insert at the end
+   * @returns A new position that satisfies `a < new < b`
+   * 
+   * @example
+   * ```typescript
+   * const fugue = new Fugue("client1");
+   * const pos1 = fugue.between(null, null); // First position
+   * const pos2 = fugue.between(pos1, null); // Insert after pos1
+   * const pos3 = fugue.between(pos1, pos2); // Insert between pos1 and pos2
+   * // pos1 < pos3 < pos2
+   * ```
+   * 
+   * @throws Will warn and adjust inputs if:
+   * - `a >= b` (when both are non-null)
+   * - `b > Fugue.LAST`
    */
-  createBetween(a: string | null, b: string | null) {
+  between(a: string | null, b: string | null) {
     let left = a;
     let right = b;
 
@@ -119,6 +132,62 @@ export class Fugue<TClientID extends string = string> {
     }
 
     return ans as FuguePosition<TClientID> & {};
+  }
+
+  /**
+   * Creates a new position immediately after the given position.
+   * This is equivalent to calling `between(position, null)`.
+   * 
+   * @param position - The existing position to insert after
+   * @returns A new position that is greater than the given position
+   * 
+   * @example
+   * ```typescript
+   * const fugue = new Fugue("client1");
+   * const pos1 = fugue.between(null, null); // First position
+   * const pos2 = fugue.after(pos1); // Insert after pos1
+   * // pos1 < pos2
+   * ```
+   */
+  after(position: string) {
+    return this.between(position, null);
+  }
+
+  /**
+   * Creates a new position immediately before the given position.
+   * This is equivalent to calling `between(null, position)`.
+   * 
+   * @param position - The existing position to insert before
+   * @returns A new position that is less than the given position
+   * 
+   * @example
+   * ```typescript
+   * const fugue = new Fugue("client1");
+   * const pos1 = fugue.between(null, null); // First position
+   * const pos2 = fugue.before(pos1); // Insert before pos1
+   * // pos2 < pos1
+   * ```
+   */
+  before(position: string) {
+    return this.between(null, position);
+  }
+
+  /**
+   * Creates the first position in a sequence.
+   * This is equivalent to calling `between(null, null)`.
+   * 
+   * @returns A new position that is greater than all existing positions
+   * 
+   * @example
+   * ```typescript
+   * const fugue = new Fugue("client1");
+   * const pos1 = fugue.first(); // First position
+   * const pos2 = fugue.after(pos1); // Insert after pos1
+   * // pos1 < pos2
+   * ```
+   */
+  first() {
+    return this.between(null, null);
   }
 
   /**

@@ -43,24 +43,24 @@ import { Fugue } from 'fugue';
 export const fugue = new Fugue('client1');
 ```
 
-Generate positions between two points using `createBetween`. Pass `null` for start/end to generate positions at the beginning/end:
+Generate positions between two points using `between`. Pass `null` for start/end to generate positions at the beginning/end:
 
 ```ts
 import { fugue } from "./fugue";
 
-const first = fugue.createBetween(null, null); // "client1.B"
+const first = fugue.first(); // "client1.B" - equivalent to `between(null, null)`
 
 // Insert after first
-const second = fugue.createBetween(first, null); // "client1.D"
+const second = fugue.after(first); // "client1.D" - equivalent to `between(first, null)`
 
 // Insert after second
-const third = fugue.createBetween(second, null); // "client1.F"
+const third = fugue.after(second); // "client1.F" - equivalent to `between(second, null)`
 
 // Insert before first
-const zeroth = fugue.createBetween(null, first); // "client1.A0B"
+const zeroth = fugue.before(first); // "client1.A0B" - equivalent to `between(null, first)`
 
 // Insert between second and third (midpoint)
-const secondAndHalf = fugue.createBetween(second, third); // "client1.D0B"
+const secondAndHalf = fugue.between(second, third); // "client1.D0B"
 ```
 
 The biggest benefit of using `fugue` over other fractional indexing libraries is that multiple independent clients
@@ -75,12 +75,12 @@ const fugue1 = new Fugue('client1');
 const fugue2 = new Fugue('client2');
 
 // create some initial starting first and last 
-const first = fugue1.createBetween(null, null); // "client1.B"
-const last = fugue1.createBetween(initialFirst, null); // "client1.D"
+const first = fugue1.first(); // "client1.B"
+const last = fugue1.after(initialFirst); // "client1.D"
 
 // simulating these happening in parallel (e.g. across multiple independent clients)
-const middle1 = fugue1.createBetween(first, last); // "client1.B0B"
-const middle2 = fugue2.createBetween(first, last); // "client1.B,client2.B"
+const middle1 = fugue1.between(first, last); // "client1.B0B"
+const middle2 = fugue2.between(first, last); // "client1.B,client2.B"
 
 // these eventually grow to e.g.: client0.B0A0B0aH0B,client1.D,client2.B,client3.L,client4.B,client5.D,client6.B,client7.B,client10.B,client23.B,client35.B,client36.B
 ```
@@ -133,7 +133,7 @@ async function insertItemBetween(listId, beforeItemId, afterItemId, itemData) {
     if (afterItem) afterPosition = afterItem.position;
     
     // Generate a position between the two
-    const position = fugue.createBetween(beforePosition, afterPosition);
+    const position = fugue.between(beforePosition, afterPosition);
     
     // Insert the new item with the generated position
     await tx.insert(items).values({
@@ -144,7 +144,6 @@ async function insertItemBetween(listId, beforeItemId, afterItemId, itemData) {
   });
 }
 ```
-
 
 ## Features
 
