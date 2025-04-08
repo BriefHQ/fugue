@@ -26,8 +26,7 @@ pnpm add fugue
 
 ## Usage
 
-First, create an instance of `Fugue`. You need to pass in a `clientID`, which is a
-unique identifier for the client.
+First, create an instance of `Fugue`. You need to pass in a `clientID`, which is a unique identifier for the client.
 
 The `clientID` should be a string that is "unique enough for the application". This means that it should be unique _given how many users will be simultaneously creating positions._ In practice, this can be quite small (e.g. `nanoid(6)`).
 
@@ -93,6 +92,11 @@ When implementing Fugue on a server, you can create a single Fugue instance with
 1. You need to generate position keys from server-side logic.
 2. Your server operations are coordinated (e.g. through database transactions).
 
+> Note: if you are using a sync engine with "server authority" like Zero, you can instead lean on the property that **Fugue is deterministic for a given client ID**.
+> This means that in your client-side code, you can optimistically generate a position with the given client ID.
+> Then, on the server, you create a Fugue instance with the same client ID, and generate a position again.
+> If your client is up-to-date, this will be the same position. If it's not, the server will overwrite the position with the correct value for the client ID.
+
 ```ts
 import { Fugue } from 'fugue';
 
@@ -140,6 +144,7 @@ async function insertItemBetween(listId, beforeItemId, afterItemId, itemData) {
   });
 }
 ```
+
 
 ## Features
 
