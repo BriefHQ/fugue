@@ -121,8 +121,8 @@ describe("fugue", () => {
     const fugue1 = new Fugue("client1");
     const fugue2 = new Fugue("client2");
 
-    const first = fugue1.between(null, null);
-    const last = fugue1.between(first, null);
+    const first = fugue1.first();
+    const last = fugue1.after(first);
 
     // simulating these happening in parallel
     const middle1 = fugue1.between(first, last);
@@ -145,7 +145,7 @@ describe("fugue", () => {
     expect(firstPos > Fugue.FIRST).toBe(true);
 
     // Test insertion at end
-    const lastPos = fugue.between(null, Fugue.LAST);
+    const lastPos = fugue.before(Fugue.LAST);
     expect(lastPos < Fugue.LAST).toBe(true);
 
     // Test insertion between FIRST and LAST
@@ -228,7 +228,7 @@ describe("fugue", () => {
   test("basic position creation", () => {
     const fugue = new Fugue("basic");
 
-    const pos = fugue.between(null, null);
+    const pos = fugue.first();
 
     // By definition, FIRST < pos < LAST
     expect(pos > Fugue.FIRST).toBe(true);
@@ -246,8 +246,8 @@ describe("fugue", () => {
   test("inserting in the middle", () => {
     const fugue = new Fugue("inserting");
 
-    const pos1 = fugue.between(null, null);
-    const pos2 = fugue.between(pos1, null);
+    const pos1 = fugue.first();
+    const pos2 = fugue.after(pos1);
     const pos3 = fugue.between(pos1, pos2);
 
     expect(pos1 < pos3).toBe(true);
